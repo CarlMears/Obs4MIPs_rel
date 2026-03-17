@@ -14,6 +14,7 @@ jobs:
             # Point to the subdirectory containing your setup/pyproject file
           package-dir: calc_tb_sounder
         env:
+          CIBW_BUILD_VERBOSITY: 1
           # Install system-level netcdf dependencies inside the manylinux container
           CIBW_BEFORE_ALL_LINUX: yum install -y netcdf-devel hdf5-devel
           # Ensure numpy is present for f2py
