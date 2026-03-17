@@ -16,11 +16,15 @@ jobs:
         env:
           CIBW_BUILD_VERBOSITY: 1
           # Install system-level netcdf dependencies inside the manylinux container
+          # 1. Install everything including the pkgconfig tool
           CIBW_BEFORE_ALL_LINUX: >
             yum install -y epel-release && 
             yum install -y netcdf-devel netcdf-fortran-devel hdf5-devel pkgconfig
+          
+          # 2. Tell Meson exactly where to look for netcdff.pc
           CIBW_ENVIRONMENT: >
-            PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/share/pkgconfig:$PKG_CONFIG_PATH
+            PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/share/pkgconfig \
+            FC=gfortran
           # Ensure numpy is present for f2py
           CIBW_BEFORE_BUILD: pip install numpy
           # Optional: Skip older Python versions
