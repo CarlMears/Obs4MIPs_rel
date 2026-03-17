@@ -65,6 +65,8 @@ After these are installed, in linux:
 
 (the name of the wheel depends on your version of python and numpy)
 
+second
+
 
 
 
