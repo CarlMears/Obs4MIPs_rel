@@ -11,7 +11,6 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.4.0
         with:
-            # Point to the subdirectory containing your setup/pyproject file
           package-dir: calc_tb_sounder
         env:
           CIBW_BUILD_VERBOSITY: 1
@@ -19,13 +18,4 @@ jobs:
           CIBW_BEFORE_ALL_LINUX: >
             dnf install -y epel-release && 
             dnf install -y netcdf-fortran-devel
-          
-          CIBW_ENVIRONMENT: >
-            PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/share/pkgconfig \
-            FC=gfortran \
-            FFLAGS="-I/usr/lib64/gfortran/modules" \
-            FCFLAGS="-I/usr/lib64/gfortran/modules"
 
-          CIBW_BEFORE_BUILD: pip install numpy
-
-          CIBW_SKIP: cp36-*, cp37-*, cp38-*, cp39-*
