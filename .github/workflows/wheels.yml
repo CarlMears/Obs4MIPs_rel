@@ -18,7 +18,7 @@ jobs:
           CIBW_BEFORE_ALL_LINUX: >
             yum install -y epel-release && 
             yum install -y netcdf-devel hdf5-devel wget m4 &&
-            wget https://github.com -O netcdf-fortran-4.6.1.tar.gz &&
+            wget http://downloads.unidata.ucar.edu/netcdf-fortran/4.6.1/netcdf-fortran-4.6.1.tar.gz &&
             tar -xzf netcdf-fortran-4.6.1.tar.gz && cd netcdf-fortran-4.6.1 &&
             export CPPFLAGS="-I/usr/include" LDFLAGS="-L/usr/lib64" &&
             ./configure --prefix=/usr --disable-shared &&
