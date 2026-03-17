@@ -33,10 +33,12 @@ endif
 
 #py = import('python').find_installation(required: true)
 py_mod = import('python')
-py = py_mod.find_installation('python3.13',pure: false)
+py = py_mod.find_installation('python',pure: false)
 py_dep = py.dependency()
-netcdf_dep = dependency('netcdf-fortran', required: true)
-
+netcdf_dep = dependency('netcdf-fortran', required: false)
+if not netcdf_dep.found()
+  netcdf_dep = dependency('netcdff', required: true)
+endif
 # ext_suffix = run_command(py, '-c', 'import sysconfig; print(sysconfig.get_config_var("EXT_SUFFIX"))', check: true).stdout().strip()
 # py_bin_dir = run_command(py, '-c', 'import os,sys; print(os.path.dirname(sys.executable))', check: true).stdout().strip()
 # system_path = run_command(py, '-c', 'import os; print(os.environ.get("PATH", ""))', check: true).stdout().strip()
