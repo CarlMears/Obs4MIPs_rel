@@ -19,3 +19,10 @@ authors = [
 
 [tool.pytest.ini_options]
 testpaths = ["python"]
+
+[tool.cibuildwheel]
+skip = "*-musllinux_*"
+
+[tool.cibuildwheel.linux]
+before-all = "dnf install -y epel-release && dnf install -y netcdf-fortran-devel"
+
