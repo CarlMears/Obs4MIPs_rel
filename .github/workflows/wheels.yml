@@ -1,0 +1,19 @@
+name: Build Wheels
+on: [push, pull_request]
+
+jobs:
+  build_wheels:
+    name: Build wheels on ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.21.0
+        env:
+          # Install system-level netcdf dependencies inside the manylinux container
+          CIBW_BEFORE_ALL_LINUX: yum install -y netcdf-devel hdf5-devel
+          # Ensure numpy is present for f2py
+          CIBW_BEFORE_BUILD: pip install numpy
+          # Optional: Skip older Python versions
+          CIBW_SKIP: cp36-* cp37-* cp38-* cp39-*
