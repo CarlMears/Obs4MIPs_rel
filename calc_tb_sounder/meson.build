@@ -67,21 +67,57 @@ incdir_f2py = run_command(py,
 
 fortranobject_c = incdir_f2py / 'fortranobject.c'
 
-# Robust search for netcdf.mod
-extra_fortran_inc = []
-fc_inc_path = run_command('find', '/usr/lib64/gfortran/modules', '-name', 'netcdf.mod', check: false).stdout().strip()
-if fc_inc_path != ''
-  extra_fortran_inc = [file_path.split('/netcdf.mod')[0]]
+# 1. Enhanced Dependency Search
+netcdf_dep = dependency('netcdf-fortran', required: false)
+if not netcdf_dep.found()
+  netcdf_dep = dependency('netcdff', required: true)
 endif
 
+# 2. Hardcoded Absolute Path for Manylinux Modules
+# On CentOS 7 (manylinux2014), netcdf.mod is in this specific path
+manylinux_mod_dir = '/usr/lib64/gfortran/modules'
+extra_inc = include_directories(manylinux_mod_dir)
+
+# 3. Extension Module with Absolute Paths & Forced Arguments
 py.extension_module('calc_tb_sounder',
-  [f2py_wrapper, fortran_src,fortranobject_c],
-  include_directories: [incdir_numpy, incdir_f2py, extra_fortran_inc],
-  dependencies : [py_dep, netcdf_dep],
-  fortran_args : fortran_args,
-  install : true,
-  subdir : 'calc_tb_sounder',
+  [
+    f2py_wrapper, 
+    fortran_src, 
+    fortranobject_c
+  ],
+  include_directories: [
+    incdir_numpy, 
+    incdir_f2py, 
+    extra_inc  # Explicitly add the module directory
+  ],
+  dependencies: [
+    py_dep, 
+    netcdf_dep
+  ],
+  # Force the Fortran compiler to look in the module directory
+  fortran_args: fortran_args + ['-I' + manylinux_mod_dir], 
+  # Ensure the linker finds the library in standard lib64
+  link_args: ['-L/usr/lib64', '-lnetcdff'],
+  install: true,
+  subdir: 'calc_tb_sounder',
 )
+
+
+# # Robust search for netcdf.mod
+# extra_fortran_inc = []
+# fc_inc_path = run_command('find', '/usr/lib64/gfortran/modules', '-name', 'netcdf.mod', check: false).stdout().strip()
+# if fc_inc_path != ''
+#   extra_fortran_inc = [file_path.split('/netcdf.mod')[0]]
+# endif
+
+# py.extension_module('calc_tb_sounder',
+#   [f2py_wrapper, fortran_src,fortranobject_c],
+#   include_directories: [incdir_numpy, incdir_f2py, extra_fortran_inc],
+#   dependencies : [py_dep, netcdf_dep],
+#   fortran_args : fortran_args,
+#   install : true,
+#   subdir : 'calc_tb_sounder',
+# )
 
 # py.install_sources('data/abs_tables/amsu_05_abs_table_q_per_Pa.dat', subdir : 'calc_tb_sounder/data/abs_tables')
 # py.install_sources('data/abs_tables/amsu_05_cld_abs_table.dat', subdir : 'calc_tb_sounder/data/abs_tables')
