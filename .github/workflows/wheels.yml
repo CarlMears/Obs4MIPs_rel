@@ -28,4 +28,4 @@ jobs:
 
           CIBW_BEFORE_BUILD: pip install numpy
 
-          CIBW_SKIP: cp39-*
+          CIBW_SKIP: cp36-*, cp37-*, cp38-*, cp39-*
