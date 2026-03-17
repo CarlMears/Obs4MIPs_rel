@@ -67,12 +67,11 @@ incdir_f2py = run_command(py,
 
 fortranobject_c = incdir_f2py / 'fortranobject.c'
 
-# Add the manylinux-specific Fortran module path
-extra_fortran_inc = '/usr/lib64/gfortran/modules'
-# Verify it exists to avoid warnings on other systems
-if not fortran_compiler.has_header('netcdf.mod', args: '-I' + extra_fortran_inc)
-  # Fallback: if it's not there, it might be in the standard include
-  extra_fortran_inc = '/usr/include'
+# Robust search for netcdf.mod
+extra_fortran_inc = []
+fc_inc_path = run_command('find', '/usr/lib64/gfortran/modules', '-name', 'netcdf.mod', check: false).stdout().strip()
+if fc_inc_path != ''
+  extra_fortran_inc = [file_path.split('/netcdf.mod')[0]]
 endif
 
 py.extension_module('calc_tb_sounder',
