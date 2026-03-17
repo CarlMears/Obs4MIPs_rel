@@ -20,3 +20,8 @@ jobs:
             dnf install -y netcdf-fortran-devel
           CIBW_SKIP: "*-musllinux_*"
 
+      - uses: actions/upload-artifact@v6
+        with:
+          name: cibw-wheels-ubuntu-latest
+          path: ./wheelhouse/*.whl
+
