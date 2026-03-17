@@ -10,6 +10,9 @@ jobs:
       
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.21.0
+        with:
+            # Point to the subdirectory containing your setup/pyproject file
+          package-dir: calc_tb_sounder
         env:
           # Install system-level netcdf dependencies inside the manylinux container
           CIBW_BEFORE_ALL_LINUX: yum install -y netcdf-devel hdf5-devel
