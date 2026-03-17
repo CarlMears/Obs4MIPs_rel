@@ -18,4 +18,5 @@ jobs:
           CIBW_BEFORE_ALL_LINUX: >
             dnf install -y epel-release && 
             dnf install -y netcdf-fortran-devel
+          CIBW_SKIP: "*-musllinux_*"
 
