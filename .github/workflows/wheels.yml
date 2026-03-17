@@ -20,6 +20,7 @@ jobs:
           CIBW_BEFORE_ALL_LINUX: >
             yum install -y epel-release && 
             yum install -y netcdf-devel netcdf-fortran-devel hdf5-devel pkgconfig
+            
             find /usr -name "netcdf.mod" # <--- Debugging: verify location
           # 2. Tell Meson exactly where to look for netcdff.pc
           CIBW_ENVIRONMENT: >
