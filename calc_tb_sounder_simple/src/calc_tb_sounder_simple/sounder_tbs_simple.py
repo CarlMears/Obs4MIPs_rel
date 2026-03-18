@@ -32,12 +32,19 @@ class SounderForwardOperatorSimple:
 
         self.AtmWt_dict = AtmWt_dict
 
+    def _strip_first_dims(self, arr: np.ndarray) -> np.ndarray:
+        
+        if arr.shape[0] == 1:
+            return arr[0]
+        else:
+            return arr
+
     def compute_tbs(self, 
                     model_data: Dict[str, NDArray[np.float32]],
                     verbose=True,use_skin_temperature=True) -> Dict[str, NDArray[np.float32]]:
 
-        sea_ice_frac = model_data['sea_ice_fraction']   
-        land_frac = model_data['land_fraction']
+        sea_ice_frac = self._strip_first_dims(model_data['sea_ice_fraction'])   
+        land_frac = self._strip_first_dims(model_data['land_fraction'])
 
         sea_ice_frac[np.isnan(sea_ice_frac)] = 0.0
         sea_ice_frac[sea_ice_frac < -1.0] = 0.0
