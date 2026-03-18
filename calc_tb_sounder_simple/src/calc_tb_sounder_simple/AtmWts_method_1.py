@@ -108,7 +108,7 @@ def AtmLevelWts_Numba(*,weighting_function,
             surface_wts[ilat,ilon] = surf_wt
             space_wts[ilat,ilon]   = space_wt
 
-            tbs[ilat,ilon] = ts[ilat,ilon]*surf_wt + np.sum(temp_profiles[:,ilat,ilon]*wt_ref) + space_wt*2.730
+            tbs[ilat,ilon] = ts[ilat,ilon]*surf_wt + np.sum(temp_profiles[ilat,ilon,:]*wt_ref) + space_wt*2.730
 
     return tbs,level_wts,surface_wts,space_wts
 
@@ -163,26 +163,18 @@ class AtmWt():
                 space_wts    numpy array of "space" weights, 2D, [lat,lon].  Multiplied by 2.73K in routine
         '''
 
-        sz1 = temp_profiles.shape
-        sz2 = ps.shape
-        sz3 = levels.shape
-
-        print('temp_profiles shape: ' + str(sz1))
-        print('ps shape: ' + str(sz2))
-        print('levels shape: ' + str(sz3))
-
         temp_profiles = self._strip_first_dims(temp_profiles)
         ps = self._strip_first_dims(ps)
         levels = self._strip_first_dims(levels)
 
-        print('temp_profiles shape: ' + str(sz1))
-        print('ps shape: ' + str(sz2))
-        print('levels shape: ' + str(sz3))
+        sz1 = temp_profiles.shape
+        sz2 = ps.shape
+        sz3 = levels.shape
 
         try:
-            assert(sz1[0] == sz3[0])
-            assert(sz1[1] == sz2[0])
-            assert(sz1[2] == sz2[1])
+            assert(sz1[2] == sz3[0])
+            assert(sz1[0] == sz2[0])
+            assert(sz1[1] == sz2[1])
         except AssertionError:
             raise ValueError('Array sizes do not match  in AtmLevelWts')
 
