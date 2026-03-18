@@ -73,11 +73,6 @@ if not netcdf_dep.found()
   netcdf_dep = dependency('netcdff', required: true)
 endif
 
-# 2. Hardcoded Absolute Path for Manylinux Modules
-# On CentOS 7 (manylinux2014), netcdf.mod is in this specific path
-manylinux_mod_dir = '/usr/lib64/gfortran/modules'
-extra_inc = include_directories(manylinux_mod_dir)
-
 # 3. Extension Module with Absolute Paths & Forced Arguments
 py.extension_module('calc_tb_sounder',
   [
@@ -88,14 +83,13 @@ py.extension_module('calc_tb_sounder',
   include_directories: [
     incdir_numpy, 
     incdir_f2py, 
-    extra_inc  # Explicitly add the module directory
   ],
   dependencies: [
     py_dep, 
     netcdf_dep
   ],
   # Force the Fortran compiler to look in the module directory
-  fortran_args: fortran_args + ['-I' + manylinux_mod_dir], 
+  fortran_args: fortran_args + ['-I/usr/include'],
   # Ensure the linker finds the library in standard lib64
   link_args: ['-L/usr/lib64', '-lnetcdff'],
   install: true,
