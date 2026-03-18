@@ -6,26 +6,17 @@ jobs:
     name: Build wheels on ubuntu-latest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.21.0
+        uses: pypa/cibuildwheel@v3.4.0
         with:
-            # Point to the subdirectory containing your setup/pyproject file
           package-dir: calc_tb_sounder
         env:
           CIBW_BUILD_VERBOSITY: 1
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
-          CIBW_BEFORE_ALL_LINUX: >
-            dnf install -y epel-release && 
-            dnf install -y netcdf-devel netcdf-fortran-devel hdf5-devel pkgconfig
-          
-          CIBW_ENVIRONMENT: >
-            PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/share/pkgconfig \
-            FC=gfortran \
-            FFLAGS="-I/usr/lib64/gfortran/modules" \
-            FCFLAGS="-I/usr/lib64/gfortran/modules"
 
-          CIBW_BEFORE_BUILD: pip install numpy
+      - uses: actions/upload-artifact@v6
+        with:
+          name: cibw-wheels-ubuntu-latest
+          path: ./wheelhouse/*.whl
 
-          CIBW_SKIP: cp36-*, cp37-*, cp38-*, cp39-*
