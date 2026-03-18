@@ -4,31 +4,49 @@ from typing import Dict
 from pathlib import Path
 from numpy.typing import NDArray
 import numpy as np
+from importlib import resources
+
 
 from .AtmWts_method_1 import AtmWt
 
+#class AMSUForwardOperatorTable
+class SounderForwardOperatorSimple:
 
-class MSUTbsSimple:
-
-    def __init__(self, channel: str) -> None:
+    def __init__(self, sat: str, channel: str) -> None:
+        sat = sat.upper()
+        allowed_sats = ['MSU','AMSU']        
+        if sat not in allowed_sats:
+            raise ValueError(f"Invalid satellite: {sat}. Allowed satellites are: {allowed_sats}")
+        
+        channel = channel.upper()
         allowed_channels = ['TLT','TMT','TTS','TLS']
         if channel not in allowed_channels:
             raise ValueError(f"Invalid channel: {channel}. Allowed channels are: {allowed_channels}")
         self.channel = channel
         AtmWt_dict = {}
-        rtm_data_path = Path(__file__).resolve().parent.parent.parent / 'data' / 'wt_tables'
-        sat = 'MSU'
+
+        rtm_data_path = resources.files("calc_tb_sounder_simple") / "data" / "wt_tables" 
+        
         AtmWt_dict['ocean'] = AtmWt(channel = channel,surface = 'ocean',sat=sat,RTM_Data_Path=rtm_data_path,verbose=True)
         AtmWt_dict['land']  = AtmWt(channel = channel,surface = 'land',sat=sat,RTM_Data_Path=rtm_data_path,verbose=True)
 
         self.AtmWt_dict = AtmWt_dict
+        self.sat = sat
+        self.channel = channel
+
+    def _strip_first_dims(self, arr: np.ndarray) -> np.ndarray:
+        
+        if arr.shape[0] == 1:
+            return arr[0]
+        else:
+            return arr
 
     def compute_tbs(self, 
                     model_data: Dict[str, NDArray[np.float32]],
                     verbose=True,use_skin_temperature=True) -> Dict[str, NDArray[np.float32]]:
 
-        sea_ice_frac = model_data['sea_ice_fraction']   
-        land_frac = model_data['land_fraction']
+        sea_ice_frac = self._strip_first_dims(model_data['sea_ice_fraction'])   
+        land_frac = self._strip_first_dims(model_data['land_fraction'])
 
         sea_ice_frac[np.isnan(sea_ice_frac)] = 0.0
         sea_ice_frac[sea_ice_frac < -1.0] = 0.0

@@ -1,17 +1,10 @@
-from rss_amsu_forward_operator import AMSUForwardOperatorTable
-from rss_amsu_forward_operator.check_model_data import check_model_data
+from Obs4MIPS_forward_operator import AMSUForwardOperatorTable
+from Obs4MIPS_forward_operator.check_model_data import check_model_data
 from era5 import era5_monthly_files,read_era5_data_monthly
 import numpy as np
 import xarray as xr
 from pathlib import Path
 # for graphical debugging
-try:
-    from rss_plotting.global_map import plot_global_map
-    do_global_map = True
-except ImportError:
-    print("rss_plotting module not found. Fancy Global map plotting will be unavailable.")
-    print("The RSS plotting module is available here: https://github.com/CarlMears/RSS_plotting")
-    do_global_map = False
 import matplotlib.pyplot as plt
 
 # This not strictlyneeded, but a lot problems can arise if the wrong Python environment is being used,
@@ -30,7 +23,7 @@ if __name__ == "__main__":
     year = 2024
     OxygenAbs_index = 5
 
-    path_to_era5 = Path('/mnt/m/Obs4MIPs_release/Obs4MIPs_AMSU_forward_operator/examples/input_data/ERA5/monthly')  # Change this to the path where your ERA5 monthly data is stored.
+    path_to_era5 = Path('/mnt/m/Obs4MIPs_rel/Obs4MIPs_forward_operator/examples/input_data/ERA5/monthly')  # Change this to the path where your ERA5 monthly data is stored.
 
     # find a list of the ERA5 files needed
     era5_files = era5_monthly_files(year_to_do=year, month_to_do=month, path_to_era5=path_to_era5)
@@ -45,23 +38,20 @@ if __name__ == "__main__":
     amsu_op = AMSUForwardOperatorTable(AMSU_channel=5,OxygenAbs_index=OxygenAbs_index)
 
     #compute the brightness temperatures for the specified month and year
-    brightness_temperatures = amsu_op.compute_tbs(model_data)
+    brightness_temperatures_5 = amsu_op.compute_tbs(model_data)
 
-    channels_present = list(brightness_temperatures.keys())  # For AMSU Channel 5, we compute TLT and TMT. 
+    channels_present = list(brightness_temperatures_5.keys())  # For AMSU Channel 5, we compute TLT and TMT. 
                                                              # For AMSU Channel 7, we compute TTS. 
                                                              # For AMSU Channel 9, we compute TLS.
     print(f"Channels present in output: {channels_present}")
-    for channel, tb in brightness_temperatures.items():
-        if do_global_map:
-            plot_global_map(tb,vmin=220.0,vmax=285.0, plt_colorbar=True, 
-                            title=f'{channel} TB', cmap='viridis')
-        else:
-            plt.figure(figsize=(12,6))
-            plt.imshow(tb, vmin=200.0, vmax=300.0, cmap='viridis')
-            plt.colorbar(label='Brightness Temperature (K)')
-            plt.title(f'{channel} TB')
-            plt.xlabel('Longitude Index')
-            plt.ylabel('Latitude Index')
+    for channel, tb in brightness_temperatures_5.items():
+
+        plt.figure(figsize=(12,6))
+        plt.imshow(np.flipud(tb), vmin=200.0, vmax=300.0, cmap='viridis')
+        plt.colorbar(label='Brightness Temperature (K)')
+        plt.title(f'{channel} TB')
+        plt.xlabel('Longitude Index')
+        plt.ylabel('Latitude Index')
 
     # intialize the AMSU forward operator for choosen channel
     OxygenAbs_index = 4
@@ -75,28 +65,21 @@ if __name__ == "__main__":
                                                                # For AMSU Channel 9, we compute TLS.
     print(f"Channels present in output: {channels_present}")
     for channel, tb in brightness_temperatures_4.items():
-        if do_global_map:
-            plot_global_map(tb,vmin=220.0,vmax=285.0, plt_colorbar=True, 
-                            title=f'{channel} TB', cmap='viridis')
-        else:
-            plt.figure(figsize=(12,6))
-            plt.imshow(tb, vmin=200.0, vmax=300.0, cmap='viridis')
-            plt.colorbar(label='Brightness Temperature (K)')
-            plt.title(f'{channel} TB')
-            plt.xlabel('Longitude Index')
-            plt.ylabel('Latitude Index')
-
-
-    diff_tmt = brightness_temperatures['tbs_TMT'] - brightness_temperatures_4['tbs_TMT']
-    if do_global_map:
-        plot_global_map(diff_tmt,vmin=-0.5,vmax=0.5, plt_colorbar=True, 
-                        title=f'TMT TB Difference (OxygenAbs_index=5 - OxygenAbs_index=4)', cmap='bwr')
-    else:
         plt.figure(figsize=(12,6))
-        plt.imshow(diff_tmt, vmin=-0.5, vmax=0.5, cmap='bwr')
-        plt.colorbar(label='Brightness Temperature Difference (K)')
-        plt.title(f'TMT TB Difference (OxygenAbs_index=5 - OxygenAbs_index=4)')
+        plt.imshow(np.flipud(tb), vmin=200.0, vmax=300.0, cmap='viridis')
+        plt.colorbar(label='Brightness Temperature (K)')
+        plt.title(f'{channel} TB')
         plt.xlabel('Longitude Index')
         plt.ylabel('Latitude Index')
+
+
+    diff_tmt = brightness_temperatures_5['tbs_TMT'] - brightness_temperatures_4['tbs_TMT']
+
+    plt.figure(figsize=(12,6))
+    plt.imshow(np.flipud(diff_tmt), vmin=-0.5, vmax=0.5, cmap='bwr')
+    plt.colorbar(label='Brightness Temperature Difference (K)')
+    plt.title(f'TMT TB Difference (OxygenAbs_index=5 - OxygenAbs_index=4)')
+    plt.xlabel('Longitude Index')
+    plt.ylabel('Latitude Index')
     plt.show()
     print()

@@ -108,8 +108,7 @@ def AtmLevelWts_Numba(*,weighting_function,
             surface_wts[ilat,ilon] = surf_wt
             space_wts[ilat,ilon]   = space_wt
 
-            tbs[ilat,ilon] = ts[ilat,ilon]*surf_wt + np.sum(temp_profiles[:,ilat,ilon]*wt_ref) + space_wt*2.730
-
+            tbs[ilat,ilon] = ts[ilat,ilon]*surf_wt + np.sum(temp_profiles[ilat,ilon,:]*wt_ref) + space_wt*2.730
     return tbs,level_wts,surface_wts,space_wts
 
 class AtmWt():
@@ -118,7 +117,7 @@ class AtmWt():
     def __init__(self, channel='TLT',surface = 'ocean',sat='msu',RTM_Data_Path='',verbose=True):
 
         path = Path(RTM_Data_Path)
-        nc_file = path / f'std_atmosphere_wt_function_{sat}_chan_{channel}_{surface}_by_surface_pressure.1100.V4.nc'
+        nc_file = path / f'std_atmosphere_wt_function_{sat.lower()}_chan_{channel.upper()}_{surface.lower()}_by_surface_pressure.1100.V4.nc'
         if verbose:
             print('Reading: ' + str(nc_file))
         nc_fid = Dataset(nc_file, 'r')
@@ -135,6 +134,13 @@ class AtmWt():
         self.space_weight = space_weight
         weighting_function = np.array(nc_fid.variables['weighting_function'][:,:])
         self.weighting_function = weighting_function
+
+    def _strip_first_dims(self, arr: np.ndarray) -> np.ndarray:
+        
+        if arr.shape[0] == 1:
+            return arr[0]
+        else:
+            return arr
 
     def AtmLevelWts(self, temp_profiles, ps, ts,levels):
 
@@ -156,14 +162,19 @@ class AtmWt():
                 space_wts    numpy array of "space" weights, 2D, [lat,lon].  Multiplied by 2.73K in routine
         '''
 
+        temp_profiles = self._strip_first_dims(temp_profiles)
+        ps = self._strip_first_dims(ps)
+        ts = self._strip_first_dims(ts)
+        levels = self._strip_first_dims(levels)
+
         sz1 = temp_profiles.shape
         sz2 = ps.shape
         sz3 = levels.shape
 
         try:
-            assert(sz1[0] == sz3[0])
-            assert(sz1[1] == sz2[0])
-            assert(sz1[2] == sz2[1])
+            assert(sz1[2] == sz3[0])
+            assert(sz1[0] == sz2[0])
+            assert(sz1[1] == sz2[1])
         except AssertionError:
             raise ValueError('Array sizes do not match  in AtmLevelWts')
 
@@ -174,9 +185,9 @@ class AtmWt():
                                           surface_pressure = self.surface_pressure,
                                           temp_profiles = temp_profiles,
                                           ts = ts,
-                                          num_lats = sz1[1],
-                                          num_lons = sz1[2],
-                                          num_levels = sz1[0],
+                                          num_lats = sz1[0],
+                                          num_lons = sz1[1],
+                                          num_levels = sz1[2],
                                           ps = ps,
                                           levels = levels)
         return tbs,level_wts,surface_wts,space_wts
