@@ -1,5 +1,6 @@
 from Obs4MIPS_forward_operator import AMSUForwardOperatorTable
 from Obs4MIPS_forward_operator.check_model_data import check_model_data
+from calc_tb_sounder_simple.sounder_tbs_simple import SounderForwardOperatorSimple
 from era5 import era5_monthly_files,read_era5_data_monthly
 import numpy as np
 import xarray as xr
@@ -81,5 +82,28 @@ if __name__ == "__main__":
     plt.title(f'TMT TB Difference (OxygenAbs_index=5 - OxygenAbs_index=4)')
     plt.xlabel('Longitude Index')
     plt.ylabel('Latitude Index')
+
+
+    # intialize the AMSU forward operator for choosen channel
+    amsu_op = SounderForwardOperatorSimple(sat='AMSU', channel='TMT')
+
+    #compute the brightness temperatures for the specified month and year
+    tb_tmt_simple = amsu_op.compute_tbs(model_data)
+    plt.figure(figsize=(12,6))
+    plt.imshow(np.flipud(tb), vmin=200.0, vmax=300.0, cmap='viridis')
+    plt.colorbar(label='Brightness Temperature (K)')
+    plt.title(f'{amsu_op.sat}, {amsu_op.channel} TB')
+    plt.xlabel('Longitude Index')
+    plt.ylabel('Latitude Index')
+
+
+    diff_tmt_simple = tb_tmt_simple - brightness_temperatures_4['tbs_TMT'] 
+    plt.figure(figsize=(12,6))
+    plt.imshow(np.flipud(diff_tmt_simple-0.7), vmin=-2.0, vmax=2.0, cmap='bwr')
+    plt.colorbar(label='Brightness Temperature Difference (K)')
+    plt.title(f'TMT TB Difference (SounderForwardOperatorSimple - AMSUForwardOperatorTable with OxygenAbs_index=4)')
+    plt.xlabel('Longitude Index')
+    plt.ylabel('Latitude Index')
+
     plt.show()
     print()

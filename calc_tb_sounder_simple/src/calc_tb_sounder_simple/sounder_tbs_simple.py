@@ -31,6 +31,8 @@ class SounderForwardOperatorSimple:
         AtmWt_dict['land']  = AtmWt(channel = channel,surface = 'land',sat=sat,RTM_Data_Path=rtm_data_path,verbose=True)
 
         self.AtmWt_dict = AtmWt_dict
+        self.sat = sat
+        self.channel = channel
 
     def _strip_first_dims(self, arr: np.ndarray) -> np.ndarray:
         

@@ -37,48 +37,18 @@ if __name__ == "__main__":
     amsu_op = SounderForwardOperatorSimple(sat='AMSU', channel='TMT')
 
     #compute the brightness temperatures for the specified month and year
-    brightness_temperatures_5 = amsu_op.compute_tbs(model_data)
-
-    channels_present = list(brightness_temperatures_5.keys())  # For AMSU Channel 5, we compute TLT and TMT. 
-                                                             # For AMSU Channel 7, we compute TTS. 
-                                                             # For AMSU Channel 9, we compute TLS.
-    print(f"Channels present in output: {channels_present}")
-    for channel, tb in brightness_temperatures_5.items():
-
-        plt.figure(figsize=(12,6))
-        plt.imshow(np.flipud(tb), vmin=200.0, vmax=300.0, cmap='viridis')
-        plt.colorbar(label='Brightness Temperature (K)')
-        plt.title(f'{channel} TB')
-        plt.xlabel('Longitude Index')
-        plt.ylabel('Latitude Index')
-
-    # intialize the AMSU forward operator for choosen channel
-    OxygenAbs_index = 4
-    amsu_op = AMSUForwardOperatorTable(AMSU_channel=5,OxygenAbs_index=OxygenAbs_index)
-
-    #compute the brightness temperatures for the specified month and year
-    brightness_temperatures_4 = amsu_op.compute_tbs(model_data)
-
-    channels_present = list(brightness_temperatures_4.keys())  # For AMSU Channel 5, we compute TLT and TMT. 
-                                                               # For AMSU Channel 7, we compute TTS. 
-                                                               # For AMSU Channel 9, we compute TLS.
-    print(f"Channels present in output: {channels_present}")
-    for channel, tb in brightness_temperatures_4.items():
-        plt.figure(figsize=(12,6))
-        plt.imshow(np.flipud(tb), vmin=200.0, vmax=300.0, cmap='viridis')
-        plt.colorbar(label='Brightness Temperature (K)')
-        plt.title(f'{channel} TB')
-        plt.xlabel('Longitude Index')
-        plt.ylabel('Latitude Index')
+    tb = amsu_op.compute_tbs(model_data)
 
 
-    diff_tmt = brightness_temperatures_5['tbs_TMT'] - brightness_temperatures_4['tbs_TMT']
+    
 
     plt.figure(figsize=(12,6))
-    plt.imshow(np.flipud(diff_tmt), vmin=-0.5, vmax=0.5, cmap='bwr')
-    plt.colorbar(label='Brightness Temperature Difference (K)')
-    plt.title(f'TMT TB Difference (OxygenAbs_index=5 - OxygenAbs_index=4)')
+    plt.imshow(np.flipud(tb), vmin=200.0, vmax=300.0, cmap='viridis')
+    plt.colorbar(label='Brightness Temperature (K)')
+    plt.title(f'{amsu_op.sat}, {amsu_op.channel} TB')
     plt.xlabel('Longitude Index')
     plt.ylabel('Latitude Index')
+
     plt.show()
+
     print()
