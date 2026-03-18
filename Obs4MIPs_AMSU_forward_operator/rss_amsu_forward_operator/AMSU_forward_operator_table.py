@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Tuple, Dict
 import os
 import numpy as np
-import calc_tb_amsu.calc_tb_amsu as calc_tb_amsu
+import calc_tb_sounder.calc_tb_sounder as calc_tb_sounder
 from numpy.typing import NDArray
 import numpy as np
 
@@ -23,21 +23,21 @@ class AMSUForwardOperatorTable:
         self.AMSU_channel = int(self.AMSU_channel)
         self.OxygenAbs_index = int(self.OxygenAbs_index)
         self.VaporAbs_index = int(self.VaporAbs_index)
-        self.path_to_data = os.path.join(os.path.dirname(calc_tb_amsu.__file__),'data')
+        self.path_to_data = os.path.join(os.path.dirname(calc_tb_sounder.__file__),'data')
         print(f"Initializing AMSU tables for channel {self.AMSU_channel} from netcdf path: {self.path_to_data}")
-        err = calc_tb_amsu.rtm_tables_amsu.read_abs_table_q_amsu_netcdf(self.AMSU_channel,self.path_to_data,self.VaporAbs_index,self.OxygenAbs_index)
+        err = calc_tb_sounder.rtm_tables_amsu.read_abs_table_q_amsu_netcdf(self.AMSU_channel,self.path_to_data,self.VaporAbs_index,self.OxygenAbs_index)
         if err != 0:
             raise RuntimeError(f"AMSU table initialization failed (error={err}).")
         print(f"Initializing AMSU cloud_tables for channel {self.AMSU_channel} from netcdf path: {self.path_to_data}")
-        err = calc_tb_amsu.rtm_tables_amsu.read_cld_abs_table_amsu_netcdf(self.AMSU_channel,self.path_to_data)
+        err = calc_tb_sounder.rtm_tables_amsu.read_cld_abs_table_amsu_netcdf(self.AMSU_channel,self.path_to_data)
         if err != 0:
             raise RuntimeError(f"AMSU cloud absorption table initialization failed (error={err}).")
         print(f"Initializing AMSU ocean_emiss_tables for channel {self.AMSU_channel} from netcdf path: {self.path_to_data}")
-        err = calc_tb_amsu.rtm_tables_amsu.read_ocean_emiss_table_amsu_netcdf(self.AMSU_channel,self.path_to_data)
+        err = calc_tb_sounder.rtm_tables_amsu.read_ocean_emiss_table_amsu_netcdf(self.AMSU_channel,self.path_to_data)
         if err != 0:
             raise RuntimeError(f"AMSU ocean emissivity table initialization failed (error={err}).")
         
-        err = calc_tb_amsu.rtm_tables_amsu.read_sea_ice_emiss_table_amsu_netcdf(self.AMSU_channel,self.path_to_data)
+        err = calc_tb_sounder.rtm_tables_amsu.read_sea_ice_emiss_table_amsu_netcdf(self.AMSU_channel,self.path_to_data)
         if err != 0:
             raise RuntimeError(f"AMSU sea ice emissivity table initialization failed (error={err}).")
 
@@ -125,7 +125,7 @@ class AMSUForwardOperatorTable:
         land_emiss_in = np.asfortranarray(land_emiss_in.astype(np.float32))
 
         emissivity, surf_wt, space_wt, tb, tb_up, tb_dw, tau, err = \
-            calc_tb_amsu.calc_tb_multiview_amsu.calc_tb_multiview_table_amsu_multi_profiles(
+            calc_tb_sounder.calc_tb_multiview_amsu.calc_tb_multiview_table_amsu_multi_profiles(
             #num_profiles_value,  # These values are not needed because the Fortran code can infer them from 
             #num_levels_value,    # the array dimensions, and passing them separately will lead to errors 
             #num_views_value,     # because fortran doesnt expect them
