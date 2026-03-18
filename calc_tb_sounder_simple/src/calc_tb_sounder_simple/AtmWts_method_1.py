@@ -136,6 +136,13 @@ class AtmWt():
         weighting_function = np.array(nc_fid.variables['weighting_function'][:,:])
         self.weighting_function = weighting_function
 
+    def _strip_first_dims(self, arr: np.ndarray) -> np.ndarray:
+        
+        if arr.shape[0] == 1:
+            return arr[0]
+        else:
+            return arr
+
     def AtmLevelWts(self, temp_profiles, ps, ts,levels):
 
         '''
@@ -159,6 +166,18 @@ class AtmWt():
         sz1 = temp_profiles.shape
         sz2 = ps.shape
         sz3 = levels.shape
+
+        print('temp_profiles shape: ' + str(sz1))
+        print('ps shape: ' + str(sz2))
+        print('levels shape: ' + str(sz3))
+
+        temp_profiles = self._strip_first_dims(temp_profiles)
+        ps = self._strip_first_dims(ps)
+        levels = self._strip_first_dims(levels)
+
+        print('temp_profiles shape: ' + str(sz1))
+        print('ps shape: ' + str(sz2))
+        print('levels shape: ' + str(sz3))
 
         try:
             assert(sz1[0] == sz3[0])
