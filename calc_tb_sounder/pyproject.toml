@@ -20,9 +20,7 @@ authors = [
 [tool.pytest.ini_options]
 testpaths = ["python"]
 
-[tool.cibuildwheel]
-skip = "*-musllinux_*"
-
 [tool.cibuildwheel.linux]
-before-all = "dnf install -y epel-release && dnf install -y netcdf-fortran-devel"
+# Note this handles both manylinux_2_28 (based on AlmaLinux 8) and musllinux_1_2 (based on Alpine Linux 3.22)
+before-all = "if type dnf &> /dev/null; then dnf install -y epel-release && dnf install -y netcdf-fortran-devel; else apk add netcdf-fortran-dev; fi"
 
