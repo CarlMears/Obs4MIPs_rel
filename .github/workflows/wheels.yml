@@ -12,7 +12,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Build sdist
-        run: uv build --sdist sounder_tbs_simple -o dist
+        run: uv build --sdist calc_tb_sounder_simple -o dist
       
       - uses: actions/upload-artifact@v6
         with:
