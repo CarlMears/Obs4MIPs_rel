@@ -24,9 +24,7 @@ class AMSUForwardOperatorTable:
         self.AMSU_channel = int(self.AMSU_channel)
         self.OxygenAbs_index = int(self.OxygenAbs_index)
         self.VaporAbs_index = int(self.VaporAbs_index)
-        self.path_to_data = os.path.join(os.path.dirname(calc_tb_sounder.__file__),'data')
-
-        other_path = resources.files("calc_tb_sounder") / "data" 
+        self.path_to_data = resources.files("calc_tb_sounder") / "data" 
         print(f"Initializing AMSU tables for channel {self.AMSU_channel} from netcdf path: {self.path_to_data}")
         err = calc_tb_sounder.rtm_tables_amsu.read_abs_table_q_amsu_netcdf(self.AMSU_channel,self.path_to_data,self.VaporAbs_index,self.OxygenAbs_index)
         if err != 0:
