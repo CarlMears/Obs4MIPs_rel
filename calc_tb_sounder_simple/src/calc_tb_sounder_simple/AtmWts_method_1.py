@@ -4,7 +4,7 @@ from numba import jit
 from pathlib import Path
 
 
-#@jit(nopython = True)
+@jit(nopython = True)
 def AtmLevelWts_Numba(*,weighting_function,
                         surface_weight,
                         space_weight,
