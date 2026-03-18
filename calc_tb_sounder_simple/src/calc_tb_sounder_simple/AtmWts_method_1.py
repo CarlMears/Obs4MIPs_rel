@@ -185,9 +185,9 @@ class AtmWt():
                                           surface_pressure = self.surface_pressure,
                                           temp_profiles = temp_profiles,
                                           ts = ts,
-                                          num_lats = sz1[1],
-                                          num_lons = sz1[2],
-                                          num_levels = sz1[0],
+                                          num_lats = sz1[0],
+                                          num_lons = sz1[1],
+                                          num_levels = sz1[2],
                                           ps = ps,
                                           levels = levels)
         return tbs,level_wts,surface_wts,space_wts
