@@ -118,7 +118,7 @@ class AtmWt():
     def __init__(self, channel='TLT',surface = 'ocean',sat='msu',RTM_Data_Path='',verbose=True):
 
         path = Path(RTM_Data_Path)
-        nc_file = path / f'std_atmosphere_wt_function_{sat}_chan_{channel}_{surface}_by_surface_pressure.1100.V4.nc'
+        nc_file = path / f'std_atmosphere_wt_function_{sat.lower()}_chan_{channel.upper()}_{surface.lower()}_by_surface_pressure.1100.V4.nc'
         if verbose:
             print('Reading: ' + str(nc_file))
         nc_fid = Dataset(nc_file, 'r')
