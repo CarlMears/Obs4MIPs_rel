@@ -4,7 +4,7 @@ from numba import jit
 from pathlib import Path
 
 
-@jit(nopython = True)
+#@jit(nopython = True)
 def AtmLevelWts_Numba(*,weighting_function,
                         surface_weight,
                         space_weight,
@@ -108,8 +108,14 @@ def AtmLevelWts_Numba(*,weighting_function,
             surface_wts[ilat,ilon] = surf_wt
             space_wts[ilat,ilon]   = space_wt
 
-            tbs[ilat,ilon] = ts[ilat,ilon]*surf_wt + np.sum(temp_profiles[ilat,ilon,:]*wt_ref) + space_wt*2.730
+            print('size of tbs: ' + str(tbs.shape))
+            print('size of temp_profiles: ' + str(temp_profiles.shape))
+            print('size of wt_ref: ' + str(wt_ref.shape))
 
+            temp_profile_1d = np.copy(temp_profiles[ilat,ilon,:])
+            print('size of temp_profile_1d: ' + str(temp_profile_1d.shape))
+            tbs[ilat,ilon] = ts[ilat,ilon]*surf_wt + np.sum(temp_profile_1d*wt_ref) + space_wt*2.730
+            #raise NotImplementedError('This routine is not fully implemented yet.  The calculation of the Tbs is not correct yet.  The level weights are being calculated, but the Tbs calculation needs to be fixed.')
     return tbs,level_wts,surface_wts,space_wts
 
 class AtmWt():
