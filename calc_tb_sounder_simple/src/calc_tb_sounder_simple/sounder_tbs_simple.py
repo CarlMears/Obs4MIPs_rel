@@ -26,6 +26,7 @@ class SounderForwardOperatorSimple:
         AtmWt_dict = {}
 
         rtm_data_path = resources.files("calc_tb_sounder_simple") / "data" / "wt_tables" 
+        
         AtmWt_dict['ocean'] = AtmWt(channel = channel,surface = 'ocean',sat=sat,RTM_Data_Path=rtm_data_path,verbose=True)
         AtmWt_dict['land']  = AtmWt(channel = channel,surface = 'land',sat=sat,RTM_Data_Path=rtm_data_path,verbose=True)
 
