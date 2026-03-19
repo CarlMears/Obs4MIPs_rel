@@ -12,6 +12,8 @@ equivalent radiance from microwave sounder channels and/or products.  The most l
 ## The method in this subdirectory
 This is a table-based radiative transfer model (RTM).  In this method, we pre-compute absorption terms in the atmosphere (oxygen, vapor, liquid water) for each channel for the Microwave Sounding Unit (MSU) and the Advanced Microwave Sounding Unit (AMSU) and put the results in tables.  A similar method is used to "tablelize" ocean emissivity (depends on incidence angle, wind speed and temperature) and sea ice (depends on incidence angle and temperature). Using interpolated values from the tables as inputs to the RTM, we get an accurate estimate of radiance without having to the line-by-line calculations billions of times.  This method is coded in combination of python and fortran, using f2py wrappers.
 
+The fortran part calculates surface emissivity and tb (and additional intermediate parameters) for all 15 fields of views (FOVs) and 3 types of surfaces (Land, Water and Sea Ice).  (The AMSU-A instrument uses 30 views but the incidence angles are symmetric about nadir.)  In the python part, the results from the various FOVs are combined to make a product targeted to the satellite producted by various groups, e.g TLT and TMT for AMSU channel 5. Using the land fraction and sea ice fraction variables, the results for the difference surfaces are combined.
+
 ## Internal dependency
 The package here uses the package in /calc_tb_sounder which **should be installed first**.
 
@@ -50,6 +52,8 @@ python -m pip install dist/{name of your wheel}
     #compute the brightness temperatures for the specified month and year
     brightness_temperatures_5 = amsu_op.compute_tbs(model_data)
 ```
+### Input Data
+
 The input data is a dictionary of GCM model output.  It needs to include these variables.
 
 | name | variable | units | dimensions |
@@ -70,6 +74,12 @@ All variables should be np.float32
 We are assuming that the data are on fixed pressure levels.
 (in CMIP, cloud water is not avaliable on pressure levels - we working on that!)
 
+### Output Data
+The output data is a dictionary of np.ndarray of the approriate MSU/AMSU products. For example, for AMSU channel 5, the output will have two products, TMT and TLT.
+| name | variable | units | dimensions |
+| ---- | -------  | ----- | ---------  |
+| TLT | tbs_TLT | K | [num_lats,num_lons] |
+| TMT | tbs_TMT | K | [num_lats,num_lons] |
 
 
 ## Quick Start
