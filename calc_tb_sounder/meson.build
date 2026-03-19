@@ -96,45 +96,12 @@ py.extension_module('calc_tb_sounder',
   subdir: 'calc_tb_sounder',
 )
 
-
-# # Robust search for netcdf.mod
-# extra_fortran_inc = []
-# fc_inc_path = run_command('find', '/usr/lib64/gfortran/modules', '-name', 'netcdf.mod', check: false).stdout().strip()
-# if fc_inc_path != ''
-#   extra_fortran_inc = [file_path.split('/netcdf.mod')[0]]
-# endif
-
-# py.extension_module('calc_tb_sounder',
-#   [f2py_wrapper, fortran_src,fortranobject_c],
-#   include_directories: [incdir_numpy, incdir_f2py, extra_fortran_inc],
-#   dependencies : [py_dep, netcdf_dep],
-#   fortran_args : fortran_args,
-#   install : true,
-#   subdir : 'calc_tb_sounder',
-# )
-
-# py.install_sources('data/abs_tables/amsu_05_abs_table_q_per_Pa.dat', subdir : 'calc_tb_sounder/data/abs_tables')
-# py.install_sources('data/abs_tables/amsu_05_cld_abs_table.dat', subdir : 'calc_tb_sounder/data/abs_tables')
-# py.install_sources('data/emiss_tables/amsu_05_emiss_table_sea_ice.dat', subdir : 'calc_tb_sounder/data/emiss_tables')
-# py.install_sources('data/emiss_tables/amsu_05_emiss_table_W.dat', subdir : 'calc_tb_sounder/data/emiss_tables')
-
 py.install_sources('data/abs_tables/amsu_05_abs_table_per_Pa_q.4.4.nc', subdir : 'calc_tb_sounder/data/abs_tables')
 py.install_sources('data/abs_tables/amsu_05_abs_table_per_Pa_q.4.5.nc', subdir : 'calc_tb_sounder/data/abs_tables')
 py.install_sources('data/abs_tables/amsu_07_abs_table_per_Pa_q.4.4.nc', subdir : 'calc_tb_sounder/data/abs_tables')
 py.install_sources('data/abs_tables/amsu_07_abs_table_per_Pa_q.4.5.nc', subdir : 'calc_tb_sounder/data/abs_tables')
 py.install_sources('data/abs_tables/amsu_09_abs_table_per_Pa_q.4.4.nc', subdir : 'calc_tb_sounder/data/abs_tables')
 py.install_sources('data/abs_tables/amsu_09_abs_table_per_Pa_q.4.5.nc', subdir : 'calc_tb_sounder/data/abs_tables')
-
-
-# py.install_sources('data/abs_tables/amsu_07_abs_table_q_per_Pa.dat', subdir : 'calc_tb_sounder/data/abs_tables')
-# py.install_sources('data/abs_tables/amsu_07_cld_abs_table.dat', subdir : 'calc_tb_sounder/data/abs_tables')
-# py.install_sources('data/emiss_tables/amsu_07_emiss_table_sea_ice.dat', subdir : 'calc_tb_sounder/data/emiss_tables')
-# py.install_sources('data/emiss_tables/amsu_07_emiss_table_W.dat', subdir : 'calc_tb_sounder/data/emiss_tables')
-
-# py.install_sources('data/abs_tables/amsu_09_abs_table_q_per_Pa.dat', subdir : 'calc_tb_sounder/data/abs_tables')
-# py.install_sources('data/abs_tables/amsu_09_cld_abs_table.dat', subdir : 'calc_tb_sounder/data/abs_tables')
-# py.install_sources('data/emiss_tables/amsu_09_emiss_table_sea_ice.dat', subdir : 'calc_tb_sounder/data/emiss_tables')
-# py.install_sources('data/emiss_tables/amsu_09_emiss_table_W.dat', subdir : 'calc_tb_sounder/data/emiss_tables')
 
 py.install_sources('data/ocean_emiss_tables/ocean_emissivity_table_AMSU_channel_05.nc', subdir : 'calc_tb_sounder/data/ocean_emiss_tables')
 py.install_sources('data/ocean_emiss_tables/ocean_emissivity_table_AMSU_channel_07.nc', subdir : 'calc_tb_sounder/data/ocean_emiss_tables')
