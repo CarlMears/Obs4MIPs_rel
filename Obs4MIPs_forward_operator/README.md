@@ -37,9 +37,44 @@ python -m pip install dist/{name of your wheel}
 #(the name of the wheel probably will obs4mips_forward_operator-0.1.0-py3-none-any.whl)
 ```
 
+## Usage
+```python
+
+    # intialize the AMSU forward operator for choosen channel
+    AMSU_channel=5
+    OxygenAbs_index = 5  
+    #OxygenAbs_index = 4: Rosenkranz 1992 modified: fdabsoxy_1992_modified
+    #ioxyOxygenAbs_index = 5: Tretyakov et al 2005 modified: fdabsoxy_tretyakov_modified 
+    amsu_op = AMSUForwardOperatorTable(AMSU_channel=5,OxygenAbs_index=OxygenAbs_index)
+
+    #compute the brightness temperatures for the specified month and year
+    brightness_temperatures_5 = amsu_op.compute_tbs(model_data)
+```
+The input data is a dictionary of GCM model output.  It needs to include these variables.
+
+| name | variable | units | dimensions |
+| ---- | -------  | ----- | ---------  |
+| temperature | temperature profiles | K | [num_lats,num_lons,num_levels] |
+| specific_humidity | humidity profiles | kg/kg | [num_lats,num_lons,num_levels] |
+| liquid_content  | cloud profiles | kg/kg | [num_lats,num_lons,num_levels] |
+| surface_pressure | surface pressure | hPa | [num_lats,num_lons] |
+| surface_temperature | surface temperature | K | [num_lats,num_lons] |
+| surface_dewpoint  | surface dewpoint | K | [num_lats,num_lons] |
+| skin_temperature | temperature of the surface | K | [num_lats,num_lons] |
+| wind_10m | 10m wind speed | m/s | [num_lats,num_lons] |
+| land_fraction | could be constant | 0.0-1.0 | [num_lats,num_lons] |
+| sea_ice_fraction | sea_ice_fraction |0.0-1.0| [num_lats,num_lons] |
+| levels | pressure levels | hPa | [num_levels]
+
+All variables should be np.float32
+We are assuming that the data are on fixed pressure levels.
+(in CMIP, cloud water is not avaliable on pressure levels - we working on that!)
+
+
+
 ## Quick Start
 
-Run the example from examples folder:
+Run the example from examples folder.  Its calculates monthly AMSU maps from ERA5 output:
 
 ```bash
 cd examples
