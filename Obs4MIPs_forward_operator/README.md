@@ -89,5 +89,7 @@ Run the example from examples folder.  Its calculates monthly AMSU maps from ERA
 ```bash
 cd examples
 python test_AMSU_forward_operator_table.py
+
+
 # or use the debugger to run it....
 ```

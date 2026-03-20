@@ -23,7 +23,8 @@ if __name__ == "__main__":
     year = 2024
     OxygenAbs_index = 5
 
-    path_to_era5 = Path('/mnt/m/Obs4MIPs_rel/Obs4MIPs_forward_operator/examples/input_data/ERA5/monthly')  # Change this to the path where your ERA5 monthly data is stored.
+    script_dir = Path(__file__).resolve().parent
+    path_to_era5 = script_dir / 'input_data/ERA5/monthly'  # Change this to the path where your ERA5 monthly data is stored.
 
     # find a list of the ERA5 files needed
     era5_files = era5_monthly_files(year_to_do=year, month_to_do=month, path_to_era5=path_to_era5)
