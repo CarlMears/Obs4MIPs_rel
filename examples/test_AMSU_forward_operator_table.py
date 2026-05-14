@@ -24,7 +24,7 @@ if __name__ == "__main__":
     year = 2024
     OxygenAbs_index = 5
 
-    path_to_era5 = Path('/mnt/m/Obs4MIPs_rel/Obs4MIPs_forward_operator/examples/input_data/ERA5/monthly')  # Change this to the path where your ERA5 monthly data is stored.
+    path_to_era5 = Path('/home/frank/test_rtm/Obs4MIPs_rel/examples/input_data/ERA5/monthly')  # Change this to the path where your ERA5 monthly data is stored.
 
     # find a list of the ERA5 files needed
     era5_files = era5_monthly_files(year_to_do=year, month_to_do=month, path_to_era5=path_to_era5)
@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
     diff_tmt_simple = tb_tmt_simple - brightness_temperatures_4['tbs_TMT'] 
     plt.figure(figsize=(12,6))
-    plt.imshow(np.flipud(diff_tmt_simple-0.7), vmin=-2.0, vmax=2.0, cmap='bwr')
+    plt.imshow(np.flipud(diff_tmt_simple-0.7), vmin=-3.0, vmax=3.0, cmap='bwr')
     plt.colorbar(label='Brightness Temperature Difference (K)')
     plt.title(f'TMT TB Difference (SounderForwardOperatorSimple - AMSUForwardOperatorTable with OxygenAbs_index=4)')
     plt.xlabel('Longitude Index')

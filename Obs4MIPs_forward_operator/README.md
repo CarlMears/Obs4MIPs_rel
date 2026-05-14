@@ -110,6 +110,10 @@ python -m pip install matplotlib
 
 To the run the example (in bash):
 
+Edit line 27 in test_AMSU_forward_operator_table.py to point to the location for the example files.
+
+../Obs4MIPs_rel/examples/input_data/ERA5/monthly
+
 ```bash
 cd examples
 python test_AMSU_forward_operator_table.py
