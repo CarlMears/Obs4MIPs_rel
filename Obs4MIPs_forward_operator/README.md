@@ -121,3 +121,5 @@ python test_AMSU_forward_operator_table.py
 
 # or use the debugger to run it....
 ```
+
+The script calculates TLT and TMT from a monthly data from ERA5.  It uses two oxygen models, and also displays the difference between the results.
