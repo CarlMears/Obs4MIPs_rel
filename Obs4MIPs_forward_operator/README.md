@@ -31,7 +31,6 @@ First, install calc_tb_sounder
 
 ### Linux installation
 
-```
 
 To install the package:
 
