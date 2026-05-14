@@ -25,9 +25,16 @@ First, install calc_tb_sounder
 #### Requirements:
 - linux.  (It might to be possible to install in other unix flavors (probably easier) or in windows (probably harder), but that is out of scope for this README.md)
 - python >= 3.10
+- build
+- numpy
 - calc_tb_sounder (see the calc_tb_sounder directory in this repo)
 
 ### Linux installation
+
+```
+
+To install the package:
+
 in bash
 ```bash
 - clone this repo to your machine
@@ -40,6 +47,7 @@ python -m pip install dist/{name of your wheel}
 ```
 
 ## Usage
+
 ```python
 
     # intialize the AMSU forward operator for choosen channel
@@ -85,6 +93,23 @@ The output data is a dictionary of np.ndarray of the approriate MSU/AMSU product
 ## Quick Start
 
 Run the example from examples folder.  Its calculates monthly AMSU maps from ERA5 output:
+
+This example depends on 
+- numpy
+- xarray
+- NetCDF4
+- matplotlib
+
+At this point, you should have numpy installed already.  To install the other packages:
+
+in bash
+```bash
+python -m pip install NetCDF4
+python -m pip install xarray
+python -m pip install matplotlib
+```
+
+To the run the example (in bash):
 
 ```bash
 cd examples
