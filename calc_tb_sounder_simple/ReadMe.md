@@ -67,16 +67,22 @@ $$
 
 ## Installation
 ### Requirements
-* Python >= 3.9
+* Python >= 3.10
 * numpy
 * numba
 * netcdf4
-### From the provided wheel
-The wheel (msu_tbs_simple-{version}-py3-none-any.whl) is provide in the /dist directory. 
+* build
 
-cd to the dist directory and install with pip:
+### Linux installation
 
-python -m pip install msu_tbs_simple-0.1.1-py3-none-any.whl
+in bash
+```bash
+- clone this repo to your machine
+cd calc_tb_sounder_simple
+python -m build .
+#(this makes a python "wheel" in the /dist subdirectory.)
+python -m pip install dist/{name of your wheel}
+```
 
 ### Installing a editable version
 
@@ -86,6 +92,15 @@ python -m pip install -e .
 
 
 ## Example
-An example script (and input data) is provided in the examples directory.  The example reads monthly data from ERA5 and produces 4 files, each for the 4 MSU channels (TLT, TMT, TTS, TLS).  The files in the examples/output folder (ERA5_TLT_Tbs_2024_01.test.nc, etc) correspond to the files the example script will create -- without the .test. in the filename.
+An example script (and input data) is provided in the examples directory.  
+
+Obs4MIPs_rel/examples/test_AMSU_forward_operator_simple.py
+
+This scripts depends on:
+- numpy
+- xarray
+- NetCDF4
+
+The example reads monthly data from ERA5 and produces 4 files, each for the 4 MSU channels (TLT, TMT, TTS, TLS).  The files in the examples/output folder (ERA5_TLT_Tbs_2024_01.test.nc, etc) correspond to the files the example script will create -- without the .test. in the filename.
 
 
