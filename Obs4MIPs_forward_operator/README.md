@@ -20,14 +20,15 @@ The package here uses the package in /calc_tb_sounder which **should be installe
 ## Installation
 We recommend installing the code in you local python environment.  
 
-First, install calc_tb_sounder
+First, install calc_tb_sounder.  See the calc_tb_sounder directory in this repo.
+Do this FIRST!
 
 #### Requirements:
 - linux.  (It might to be possible to install in other unix flavors (probably easier) or in windows (probably harder), but that is out of scope for this README.md)
 - python >= 3.10
 - build
 - numpy
-- calc_tb_sounder (see the calc_tb_sounder directory in this repo)
+- calc_tb_sounder (INSTALL THIS FIRST! see the calc_tb_sounder directory in this repo)
 
 ### Linux installation
 
