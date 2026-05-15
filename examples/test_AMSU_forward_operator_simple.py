@@ -22,8 +22,8 @@ if __name__ == "__main__":
     month = 1
     year = 2024
 
-    path_to_era5 = Path('/mnt/m/Obs4MIPs_rel/examples/input_data/ERA5/monthly')  # Change this to the path where your ERA5 monthly data is stored.
-
+    path_to_era5 = Path(__file__).resolve().parent / 'input_data' / 'ERA5' / 'monthly'
+    
     # find a list of the ERA5 files needed
     era5_files = era5_monthly_files(year_to_do=year, month_to_do=month, path_to_era5=path_to_era5)
 
